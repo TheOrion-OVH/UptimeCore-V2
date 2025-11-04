@@ -1,0 +1,103 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: uptimecore_app
+    restart: unless-stopped
+    working_dir: /var/www/uptimecore
+    volumes:
+      - ./:/var/www/uptimecore
+      - ./storage:/var/www/uptimecore/storage
+    networks:
+      - uptimecore
+    depends_on:
+      - db
+      - redis
+
+  nginx:
+    image: nginx:alpine
+    container_name: uptimecore_nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./:/var/www/uptimecore
+      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
+    networks:
+      - uptimecore
+    depends_on:
+      - app
+
+  db:
+    image: mariadb:10.11
+    container_name: uptimecore_db
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: uptimecore
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_PASSWORD: root
+      MYSQL_USER: uptimecore
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - uptimecore
+    ports:
+      - "3306:3306"
+
+  redis:
+    image: redis:7-alpine
+    container_name: uptimecore_redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    networks:
+      - uptimecore
+    volumes:
+      - redis_data:/data
+
+  scheduler:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: uptimecore_scheduler
+    restart: unless-stopped
+    command: php artisan schedule:work
+    working_dir: /var/www/uptimecore
+    volumes:
+      - ./:/var/www/uptimecore
+    networks:
+      - uptimecore
+    depends_on:
+      - app
+      - db
+      - redis
+
+  queue:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: uptimecore_queue
+    restart: unless-stopped
+    command: php artisan queue:work --sleep=3 --tries=3 --max-time=3600
+    working_dir: /var/www/uptimecore
+    volumes:
+      - ./:/var/www/uptimecore
+    networks:
+      - uptimecore
+    depends_on:
+      - app
+      - db
+      - redis
+
+networks:
+  uptimecore:
+    driver: bridge
+
+volumes:
+  db_data:
+  redis_data:
+
