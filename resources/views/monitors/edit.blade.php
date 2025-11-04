@@ -32,16 +32,38 @@
                     <div class="space-y-4">
                         <div>
                             <label class="block text-sm font-medium text-gray-700">Nom</label>
-                            <input type="text" name="name" value="{{ $monitor->name }}" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                            <input type="text" name="name" value="{{ old('name', $monitor->name) }}" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                            @error('name')
+                                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                            @enderror
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700">Intervalle (secondes)</label>
-                            <input type="number" name="interval" value="{{ $monitor->interval }}" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                            <input type="number" name="interval" value="{{ old('interval', $monitor->interval) }}" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                            @error('interval')
+                                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                            @enderror
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700">Timeout (secondes)</label>
-                            <input type="number" name="timeout" value="{{ $monitor->timeout }}" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                            <input type="number" name="timeout" value="{{ old('timeout', $monitor->timeout) }}" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                            @error('timeout')
+                                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                            @enderror
                         </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Groupe (optionnel)</label>
+                            <input type="text" name="group" value="{{ old('group', $monitor->group) }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                        </div>
+                        @if ($errors->any())
+                            <div class="bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded">
+                                <ul class="list-disc list-inside">
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
                         <div class="flex justify-end space-x-4">
                             <a href="{{ route('monitors.index') }}" class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50">Annuler</a>
                             <button type="submit" class="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700">Enregistrer</button>

@@ -35,6 +35,12 @@
                 </a>
             </div>
 
+            @if (session('success'))
+                <div class="mb-4 bg-green-50 border border-green-200 text-green-800 px-4 py-3 rounded">
+                    {{ session('success') }}
+                </div>
+            @endif
+
             <div class="bg-white shadow overflow-hidden sm:rounded-md">
                 <ul class="divide-y divide-gray-200">
                     @forelse($monitors as $monitor)
