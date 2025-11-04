@@ -16,9 +16,13 @@
                         <h1 class="text-xl font-bold text-gray-900">UptimeCore</h1>
                     </div>
                     <div class="flex items-center space-x-4">
-                        <a href="/dashboard" class="text-gray-700 hover:text-gray-900">Dashboard</a>
-                        <a href="/monitors" class="text-gray-700 hover:text-gray-900">Monitors</a>
-                        <a href="/incidents" class="text-gray-700 hover:text-gray-900">Incidents</a>
+                    <a href="/dashboard" class="text-gray-700 hover:text-gray-900">Dashboard</a>
+                    <a href="/monitors" class="text-gray-700 hover:text-gray-900">Monitors</a>
+                    <a href="/incidents" class="text-gray-700 hover:text-gray-900">Incidents</a>
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <button type="submit" class="text-gray-700 hover:text-gray-900">Déconnexion</button>
+                    </form>
                     </div>
                 </div>
             </div>
