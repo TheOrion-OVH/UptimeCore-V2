@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Str;
+
 return [
     'driver' => env('SESSION_DRIVER', 'database'),
     'lifetime' => env('SESSION_LIFETIME', 120),
@@ -18,4 +20,3 @@ return [
     'same_site' => 'lax',
     'partitioned' => false,
 ];
-
