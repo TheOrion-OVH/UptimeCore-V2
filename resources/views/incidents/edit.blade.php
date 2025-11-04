@@ -32,29 +32,51 @@
                     <div class="space-y-4">
                         <div>
                             <label class="block text-sm font-medium text-gray-700">Titre</label>
-                            <input type="text" name="title" value="{{ $incident->title }}" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                            <input type="text" name="title" value="{{ old('title', $incident->title) }}" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                            @error('title')
+                                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                            @enderror
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700">Impact</label>
                             <select name="impact" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
-                                <option value="minor" {{ $incident->impact === 'minor' ? 'selected' : '' }}>Mineur</option>
-                                <option value="major" {{ $incident->impact === 'major' ? 'selected' : '' }}>Majeur</option>
-                                <option value="critical" {{ $incident->impact === 'critical' ? 'selected' : '' }}>Critique</option>
+                                <option value="minor" {{ old('impact', $incident->impact) === 'minor' ? 'selected' : '' }}>Mineur</option>
+                                <option value="major" {{ old('impact', $incident->impact) === 'major' ? 'selected' : '' }}>Majeur</option>
+                                <option value="critical" {{ old('impact', $incident->impact) === 'critical' ? 'selected' : '' }}>Critique</option>
                             </select>
+                            @error('impact')
+                                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                            @enderror
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700">Statut</label>
                             <select name="status" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
-                                <option value="investigating" {{ $incident->status === 'investigating' ? 'selected' : '' }}>En investigation</option>
-                                <option value="identified" {{ $incident->status === 'identified' ? 'selected' : '' }}>Identifié</option>
-                                <option value="monitoring" {{ $incident->status === 'monitoring' ? 'selected' : '' }}>En surveillance</option>
-                                <option value="resolved" {{ $incident->status === 'resolved' ? 'selected' : '' }}>Résolu</option>
+                                <option value="investigating" {{ old('status', $incident->status) === 'investigating' ? 'selected' : '' }}>En investigation</option>
+                                <option value="identified" {{ old('status', $incident->status) === 'identified' ? 'selected' : '' }}>Identifié</option>
+                                <option value="monitoring" {{ old('status', $incident->status) === 'monitoring' ? 'selected' : '' }}>En surveillance</option>
+                                <option value="resolved" {{ old('status', $incident->status) === 'resolved' ? 'selected' : '' }}>Résolu</option>
                             </select>
+                            @error('status')
+                                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                            @enderror
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700">Message</label>
-                            <textarea name="message" rows="4" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"></textarea>
+                            <label class="block text-sm font-medium text-gray-700">Ajouter une mise à jour</label>
+                            <textarea name="message" rows="4" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm" placeholder="Ajoutez une mise à jour...">{{ old('message') }}</textarea>
+                            <p class="mt-1 text-xs text-gray-500">Ce message sera ajouté à la timeline de l'incident</p>
+                            @error('message')
+                                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                            @enderror
                         </div>
+                        @if ($errors->any())
+                            <div class="bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded">
+                                <ul class="list-disc list-inside">
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
                         <div class="flex justify-end space-x-4">
                             <a href="{{ route('incidents.index') }}" class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50">Annuler</a>
                             <button type="submit" class="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700">Enregistrer</button>

@@ -57,6 +57,16 @@
                         </div>
                     @endif
                 </dl>
+                @if($incident->monitors->count() > 0)
+                    <div class="mb-6">
+                        <h3 class="text-lg font-medium text-gray-900 mb-2">Monitors affectés</h3>
+                        <ul class="list-disc list-inside">
+                            @foreach($incident->monitors as $monitor)
+                                <li class="text-sm text-gray-900">{{ $monitor->name }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
                 @if($incident->updates->count() > 0)
                     <div class="mt-6">
                         <h3 class="text-lg font-medium text-gray-900 mb-4">Mises à jour</h3>
